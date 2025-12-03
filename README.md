@@ -29,3 +29,10 @@
 | افزودن یک بلوک **`case SMS`** درون `switch (this.notifier)` | ویرایش (افزودن بلوک شرطی) | `ReservationService.java` | ۳ |
 
 ب) تغییرات مربوط به افزودن روش جدید پرداخت (On-Site Payment) – توسط فاطمه محجوب
+
+
+| ردیف | کلاس تغییر یافته | تغییرات اعمال شده  | توضیح کوتاه در مورد تغییر |
+| :---: | :---: | :---: | :---: |
+| **۱** | `PaymentMethods.java` | `ONSITE` (افزوده شده به enum) | افزودن نوع پرداخت جدید به سیستم |
+| **۲** | `PaymentProcessor.java` | `public void payOnSite(double amount)` | افزودن متد اجرای منطق پرداخت حضوری |
+| **۳** | `ReservationService.java` | افزودن `case ONSITE:` و فراخوانی `payOnSite()` | افزودن شرط برای هندل کردن پرداخت حضوری در ساختار `switch` |
