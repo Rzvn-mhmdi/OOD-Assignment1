@@ -4,6 +4,9 @@ import models.LuxuryRoom;
 import constants.Notifier;
 import services.Reservation;
 import models.Room;
+import services.EmailSender;
+import services.MessageSender;
+import services.PaymentProcessor;
 import services.ReservationService;
 
 public class Main {
@@ -11,8 +14,11 @@ public class Main {
         Customer customer = new Customer("Ali", "ali@example.com","09124483765", "Paris");
         Room room = new LuxuryRoom("203", 150);
         Reservation res = new Reservation(room, customer, 2);
-
-        ReservationService service = new ReservationService();
+        
+        MessageSender emailSender = new EmailSender();
+        PaymentProcessor paymentProcessor = new PaymentProcessor();
+        
+        ReservationService service = new ReservationService(emailSender, paymentProcessor);
         service.makeReservation(res, PaymentMethods.PAYPAL, Notifier.EMAIL);
     }
 }
