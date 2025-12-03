@@ -31,8 +31,11 @@
 ب) تغییرات مربوط به افزودن روش جدید پرداخت (On-Site Payment) – توسط فاطمه محجوب
 
 
-| ردیف | کلاس تغییر یافته | تغییرات اعمال شده  | توضیح کوتاه در مورد تغییر |
+
+| توضیح کوتاه در مورد تغییر | تغییرات اعمال شده | کلاس تغییر یافته | ردیف |
 | :---: | :---: | :---: | :---: |
-| **۱** | `PaymentMethods.java` | `ONSITE` (افزوده شده به enum) | افزودن نوع پرداخت جدید به سیستم |
-| **۲** | `PaymentProcessor.java` | `public void payOnSite(double amount)` | افزودن متد اجرای منطق پرداخت حضوری |
-| **۳** | `ReservationService.java` | افزودن `case ONSITE:` و فراخوانی `payOnSite()` | افزودن شرط برای هندل کردن پرداخت حضوری در ساختار `switch` |
+| افزودن نوع پرداخت جدید به سیستم | `ONSITE` (افزوده شده به enum) | `PaymentMethods.java` | **۱** |
+| افزودن متد اجرای منطق پرداخت حضوری | `public void payOnSite(double amount)` | `PaymentProcessor.java` | **۲** |
+| افزودن شرط برای هندل کردن پرداخت حضوری در ساختار `switch` | افزودن `case ONSITE:` و فراخوانی `payOnSite()` | `ReservationService.java` | **۳** |
+
+
