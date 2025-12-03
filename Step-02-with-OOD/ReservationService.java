@@ -4,15 +4,20 @@ import constants.Notifier;
 import constants.PaymentMethods;
 
 public class ReservationService {
-    private Notifier notifier = Notifier.EMAIL; //default Notifier
-    private PaymentProcessor paymentProcessor = new PaymentProcessor();
+    private MessageSender messageSender; 
+    private PaymentProcessor paymentProcessor;
+
+    public ReservationService(MessageSender sender, PaymentProcessor processor) {
+        this.messageSender = sender;
+        this.paymentProcessor = processor;
+    }
 
     public void makeReservation(Reservation res, PaymentMethods paymentType, Notifier notifier){
-        System.out.println("Processing reservation for " + res.customer.name);
+        System.out.println("Processing reservation for " + res.getCustomerName());
 
-        if(res.customer.city.equals("Paris")){
+        if(res.isCustomerFromCity("Paris")){
             System.out.println("Apply city discount for Paris!");
-            res.room.price *= 0.9;
+            res.applyDiscountToRoom(0.9); // Encapsulated discount application
         }
 
         switch (paymentType){
@@ -28,18 +33,11 @@ public class ReservationService {
         }
 
         System.out.println("----- INVOICE -----");
-        System.out.println("hotel.Customer: " + res.customer.name);
-        System.out.println("hotel.Room: " + res.room.number + " (" + res.room.type + ")");
+        System.out.println("hotel.Customer: " + res.getCustomerName());
+        System.out.println("hotel.Room: " + res.getRoomNumber() + " (" + res.getRoomType() + ")");
         System.out.println("Total: " + res.totalPrice());
         System.out.println("-------------------");
 
-       switch (this.notifier){
-           case EMAIL :
-           EmailSender emailSender = new EmailSender();
-           emailSender.sendEmail(res.customer.email, "Your reservation confirmed!");
-           break;
-           default:
-               System.out.println("There is no Message Provider");
-       }
+       messageSender.sendMessage(res.getCustomerEmail(), "Your reservation confirmed!");
     }
 }
