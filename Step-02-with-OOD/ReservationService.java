@@ -3,7 +3,7 @@ package services;
 public class ReservationService {
     
     public void makeReservation(Reservation res, PaymentService payment,
-        NotifierStrategy notifier){
+        MessageSender notifier){
         System.out.println("Processing reservation for " + res.customer.name);
 
         if(res.customer.city.equals("Paris")){
