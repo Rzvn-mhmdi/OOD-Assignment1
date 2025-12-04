@@ -63,3 +63,25 @@
 | کلاس `ReservationService` به جزئیات پیاده‌سازی داخلی (ساختار فیلدهای عمومی) کلاس‌های `Reservation`، `Customer` و `Room` وابسته می‌شود و این امر کپسوله‌سازی را نقض می‌کند | `ReservationService.makeReservation()` | نقض | **PLK** |
 | کلاس `ReservationService` برای استفاده از قابلیت‌های پرداخت، از ترکیب (`Composition`) با `PaymentProcessor` استفاده کرده است | `ReservationService.java` , `PaymentProcessor.java` | برقراری | **CRP** |
 | در کدهای اولیه، مثال مشخصی از نقض `CRP` مشاهده نمی شود | ندارد | نقض | **CRP** |
+
+
+<div dir="rtl">
+
+| اصل | مورد | کلاس / متد | علت برقراری / نقض |
+|:---:|:---:|:---:|:---:|
+| **SRP** | برقراری | `Customer.java` | فقط مسئولیت نگهداری داده‌های مشتری را دارد. |
+| **SRP** | نقض | `PaymentProcessor.java` | مسئولیت انجام چند نوع عملیات پرداخت مجزا را بر عهده دارد. |
+| **OCP** | برقراری | `Room.java`, `LuxuryRoom.java` | کلاس `LuxuryRoom` بدون نیاز به تغییر کلاس پایه `Room`، آن را گسترش داده است. |
+| **OCP** | نقض | `ReservationService.java` | کلاس برای تغییر بسته نیست. با اضافه شدن هر روش جدید پرداخت (مثلا ONSITE) یا اعلان (مثلا SMS)، بلوک‌های `switch` باید تغییر کنند. |
+| **LSP** | برقراری | `Room.java`, `LuxuryRoom.java` | نمونه کلاس فرزند (`LuxuryRoom`) می‌تواند بدون برهم زدن رفتار برنامه جایگزین نمونه کلاس والد (`Room`) در `Reservation` و سایر نقاط شود |
+| **LSP** | نقض |  |  |
+| **ISP** | برقراری | `MessageSender.java`, `EmailSender.java` | در حال حاضر، واسط `MessageSender` کوچک است و کلاس `EmailSender` فقط متدی را پیاده‌سازی کرده که به آن نیاز دارد |
+| **ISP** | نقض | `MessageSender.java` | واسط به اندازه کافی عمومی نیست؛ نام متد `sendEmail` کلاس‌های آینده (مانند `SmsSender`) را مجبور می‌کند که متدی را پیاده‌سازی کنند که به وظیفه اصلی آن‌ها مربوط نیست |
+| **DIP** | برقراری | ندارد | کلاس اصلی فاقد تزریق وابستگی از طریق واسط‌هاست |
+| **DIP** | نقض | `ReservationService.java` | ماژول سطح بالا (`ReservationService`) به جای وابستگی به یک انتزاع (`Interface`)، مستقیماً شیء کلاس سطح پایین `EmailSender` را با `new` ایجاد می‌کند |
+| **PLK** | برقراری | `Reservation.java` | متد `totalPrice()` برای محاسبه از فیلد `nights` (عضو مستقیم خودش) و شی مستقیم `room` استفاده می‌کند |
+| **PLK** | نقض | `ReservationService.makeReservation()` | کلاس `ReservationService` به جزئیات پیاده‌سازی داخلی (ساختار فیلدهای عمومی) کلاس‌های `Reservation`, `Customer` و `Room` وابسته می‌شود و این امر کپسوله‌سازی را نقض می‌کند |
+| **CRP** | برقراری | `ReservationService.java`, `PaymentProcessor.java` | کلاس `ReservationService` برای استفاده از قابلیت‌های پرداخت، از ترکیب (`Composition`) با `PaymentProcessor` استفاده کرده است |
+| **CRP** | نقض | ندارد | در کدهای اولیه، مثال مشخصی از نقض `CRP` مشاهده نمی‌شود |
+
+</div>
