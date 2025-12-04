@@ -53,23 +53,6 @@
 
 ## گام ۲: تحلیل و وارسی برنامه از منظر تحقق و یا عدم تحقق اصول SOLID
 
-| علت برقراری / نقض | کلاس / متد | مورد | اصل |
-|:---:|:---:|:---:|:---:|
-| فقط مسئولیت نگهداری داده‌های مشتری را دارد. | `Customer.java` | برقراری | **SRP** |
-| مسئولیت انجام چند نوع عملیات پرداخت مجزا را بر عهده دارد. | `PaymentProcessor.java` | نقض | **SRP** |
-| کلاس `LuxuryRoom` بدون نیاز به تغییر کلاس پایه `Room`، آن را گسترش داده است. | `Room.java`, `LuxuryRoom.java` | برقراری | **OCP** |
-| کلاس برای تغییر بسته نیست. با اضافه شدن هر روش جدید پرداخت (مثلا ONSITE) یا اعلان (مثلا SMS)، بلوک‌های `switch` باید تغییر کنند. | `ReservationService.java` | نقض | **OCP** |
-| نمونه کلاس فرزند (`LuxuryRoom`) می‌تواند بدون برهم زدن رفتار برنامه جایگزین نمونه کلاس والد (`Room`) در `Reservation` و سایر نقاط شود | `Room.java`, `LuxuryRoom.java` | برقراری | **LSP** |
-| | | نقض | **LSP** ||
-| در حال حاضر، واسط `MessageSender` کوچک است و کلاس `EmailSender` فقط متدی را پیاده‌سازی کرده که به آن نیاز دارد | `MessageSender.java` , `EmailSender.java` | برقراری | **ISP** |
-| واسط به اندازه کافی عمومی نیست؛ نام متد `sendEmail` کلاس‌های آینده (مانند `SmsSender`) را مجبور می‌کند که متدی را پیاده‌سازی کنند که به وظیفه اصلی آن‌ها مربوط نیست | `MessageSender.java` | نقض | **ISP** |
-| کلاس اصلی فاقد تزریق وابستگی از طریق واسط‌هاست | ندارد | برقراری | **DIP** |
-| ماژول سطح بالا (`ReservationService`) به جای وابستگی به یک انتزاع (`Interface`)، مستقیماً شیء کلاس سطح پایین `EmailSender` را با `new` ایجاد می‌کند | `ReservationService.java` | نقض | **DIP** |
-| متد `totalPrice()` برای محاسبه از فیلد `nights` (عضو مستقیم خودش) و شی مستقیم `room` استفاده می‌کند | `Reservation.java` | برقراری | **PLK** |
-| کلاس `ReservationService` به جزئیات پیاده‌سازی داخلی (ساختار فیلدهای عمومی) کلاس‌های `Reservation`، `Customer` و `Room` وابسته می‌شود و این امر کپسوله‌سازی را نقض می‌کند | `ReservationService.makeReservation()` | نقض | **PLK** |
-| کلاس `ReservationService` برای استفاده از قابلیت‌های پرداخت، از ترکیب (`Composition`) با `PaymentProcessor` استفاده کرده است | `ReservationService.java` , `PaymentProcessor.java` | برقراری | **CRP** |
-| در کدهای اولیه، مثال مشخصی از نقض `CRP` مشاهده نمی شود | ندارد | نقض | **CRP** |
-
 
 <div dir="rtl">
 
