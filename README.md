@@ -87,6 +87,24 @@
 | **SRP** | کلاس `PaymentProcessor.java` چندین وظیفه متفاوت (پرداخت با کارت، نقدی، پی‌پال) را در یک کلاس واحد انجام می‌داد. در نتیجه، این کلاس چندین دلیل برای تغییر داشت. | کلاس `PaymentProcessor` حذف شد و به واسط `PaymentService` و کلاس‌های تفکیک‌شده (مانند `CardPaymentService`، `PayPalPaymentService` و ...) تبدیل شد. |
 | | کلاس `ReservationService` نیز مستقیماً به جزئیات پیاده‌سازی متدهای اختصاصی (مانند `payByCard`) در `PaymentProcessor` وابسته بود. | در `ReservationService`: وابستگی مستقیم به `PaymentProcessor` حذف شد. متغیر `processor` از نوع واسط `PaymentService` تعریف شد و اجرای نهایی عملیات پرداخت تنها با یک فراخوانی عمومی (`processor.processPayment(res.totalPrice());`) انجام گرفت. این کار مسئولیت اجرای دقیق پرداخت را به کلاس‌های جدید منتقل کرد. |
 | | علاوه بر این، کلاس `ReservationService` نیز چندین مسئولیت مستقل را با هم ترکیب کرده بود: مدیریت رزرو و اعمال تخفیف، مدیریت پرداخت، و مدیریت اطلاع‌رسانی (سه دلیل برای تغییر). | برای `ReservationService`: وظایف اضافی به کلاس‌های تخصصی منتقل شدند: اعمال تخفیف به `DiscountStrategy` و چاپ فاکتور به `InvoicePrinter`. همچنین، وابستگی به سرویس‌ها (پرداخت، اطلاع‌رسانی) از طریق صدا زدن متد مربوطه انجام شد. این امر `ReservationService` را به یک هماهنگ‌کننده تبدیل کرد و SRP به طور کامل برقرار شد. |
-| **OCP** | مشکل در کد اولیه: کلاس `ReservationService` به شدت به جزئیات پیاده‌سازی متدهای پرداخت و اطلاع‌رسانی وابسته بود. این وابستگی از طریق استفاده از بلوک‌های `switch` برای مدیریت Enumsهای `PaymentMethods` و `Notifier` ایجاد شده بود. در نتیجه، افزودن هر روش پرداخت یا اعلان‌کننده جدید نیازمند تغییر کد داخلی متد `makeReservation` بود. | متد `makeReservation` اکنون اینترفیس‌ها (مانند `PaymentService` و `MessageSender`) را به عنوان پارامتر دریافت می‌کند. با این کار، کلاس `ReservationService` دیگر نیازی به دانستن نوع پرداخت یا اعلان‌کننده ندارد و فقط متدهای عمومی را فراخوانی می‌کند. این ساختار تضمین می‌کند که کلاس برای تغییر بسته و برای گسترش باز است. |
+| **OCP** |  کلاس `ReservationService` به شدت به جزئیات پیاده‌سازی متدهای پرداخت و اطلاع‌رسانی وابسته بود. این وابستگی از طریق استفاده از بلوک‌های `switch` برای مدیریت Enumsهای `PaymentMethods` و `Notifier` ایجاد شده بود. در نتیجه، افزودن هر روش پرداخت یا اعلان‌کننده جدید نیازمند تغییر کد داخلی متد `makeReservation` بود. | متد `makeReservation` اکنون اینترفیس‌ها (مانند `PaymentService` و `MessageSender`) را به عنوان پارامتر دریافت می‌کند. با این کار، کلاس `ReservationService` دیگر نیازی به دانستن نوع پرداخت یا اعلان‌کننده ندارد و فقط متدهای عمومی را فراخوانی می‌کند. این ساختار تضمین می‌کند که کلاس برای تغییر بسته و برای گسترش باز است. |
+| **ISP** | `MessageSender` فقط برای ایمیل نامگذاری شده (`sendEmail`) و محدود به ایمیل است | تغییر نام اینترفیس به `sendMessage` برای عمومی‌تر شدن و پشتیبانی از انواع پیام‌رسانی |
+| **ISP** | `EmailSender` نام متد `sendEmail` دارد که با اینترفیس همخوان نیست | تغییر نام متد به `sendMessage` در `EmailSender` برای تطابق با اینترفیس |
+| **PLK** | در `ReservationService`: دسترسی مستقیم به `res.customer.city` | افزودن متد `isCity()` در `Customer` و استفاده از `res.isCustomerFromCity("Paris")` |
+| **PLK** | در `ReservationService`: دسترسی مستقیم به `res.customer.name` | افزودن متد `getName()` در `Customer` و استفاده از `res.getCustomerName()` |
+| **PLK** | در `ReservationService`: دسترسی مستقیم به `res.customer.email` | افزودن متد `getEmail()` در `Customer` و استفاده از `res.getCustomerEmail()` |
+| **PLK** | در `ReservationService`: دسترسی مستقیم به `res.room.price` | افزودن متد `getPrice()` و `applyDiscount()` در `Room` و استفاده از `res.applyDiscountToRoom(0.9)` |
+| **PLK** | در `ReservationService`: دسترسی مستقیم به `res.room.number` و `res.room.type` | افزودن متد `getNumber()` و `getType()` در `Room` و استفاده از `res.getRoomNumber()` و `res.getRoomType()` |
+| **PLK** | در `Reservation`: فیلدهای `room`، `customer` و `nights` عمومی (`public`) هستند | تغییر فیلدها به `private` و اضافه کردن متدهای `getter` |
+| **PLK** | در `Customer`: همه فیلدها `public` هستند | تغییر فیلدها به `private` و اضافه کردن متدهای `getter` |
+| **PLK** | در `Room`: همه فیلدها `public` هستند | تغییر فیلدها به `private` و اضافه کردن متدهای `getter` |
+| **DIP** | در `ReservationService`: وابستگی مستقیم به `EmailSender` (کلاس concrete) | وابستگی به اینترفیس `MessageSender` و تزریق آن از طریق `constructor` |
+| **DIP** | در `ReservationService`: ایجاد نمونه مستقیم از `PaymentProcessor` | تزریق `PaymentProcessor` از طریق `constructor` |
+| **DIP** | در `ReservationService`: ایجاد نمونه مستقیم از `EmailSender` | حذف ایجاد نمونه مستقیم و استفاده از `messageSender` تزریق‌شده |
+| **DIP** | در `Main`: `ReservationService` بدون پارامتر ساخته می‌شود | تزریق وابستگی‌ها (`MessageSender` و `PaymentProcessor`) به `constructor` |
+| **DIP** | در `Main`: استفاده مستقیم از `ReservationService` بدون تزریق وابستگی | ایجاد `EmailSender` و `PaymentProcessor` و تزریق آن‌ها به `ReservationService` |
+| **DIP** | کلاس‌های `EmailSender` و `PaymentProcessor` سطح دسترسی package-private دارند | تغییر سطح دسترسی به `public` برای استفاده در لایه‌های دیگر |
+| **DIP** | در `EmailSender` عدم استفاده از annotation `@Override` | اضافه کردن `@Override` برای اطمینان از صحت پیاده‌سازی |
+
 
 </div>
