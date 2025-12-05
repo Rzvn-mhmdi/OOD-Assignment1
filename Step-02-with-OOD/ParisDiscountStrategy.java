@@ -1,6 +1,6 @@
 package services;
 
-public class CityDiscountService implements DiscountStrategy {
+public class ParisDiscountStrategy implements DiscountStrategy {
     @Override
     public void applyDiscount(Reservation res) {
         if (res.customer.city.equals("Paris")) {
