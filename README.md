@@ -112,11 +112,11 @@
 
 تعداد تغییرات مورد نیاز، **۴** تا خواهد بود که شامل ایجاد فایل‌های جدید و تغییر در کلاس `Main` است:
 
-* **قابلیت ONSITE:** ساخت یک کلاس جدید به نام `OnSitePaymentService.java` که اینترفیس `PaymentService` را پیاده‌سازی کرده و منطق پرداخت حضوری را در متد `processPayment` تعریف کند.
+ **قابلیت ONSITE:** ساخت یک کلاس جدید به نام `OnSitePaymentService.java` که اینترفیس `PaymentService` را پیاده‌سازی کرده و منطق پرداخت حضوری را در متد `processPayment` تعریف کند.
 
-* **قابلیت SMS:** ساخت یک کلاس جدید به نام `SmsSender.java` که اینترفیس `MessageSender` را پیاده‌سازی کرده و منطق ارسال پیامک را در متد `sendNotification` تعریف کند.
+ **قابلیت SMS:** ساخت یک کلاس جدید به نام `SmsSender.java` که اینترفیس `MessageSender` را پیاده‌سازی کرده و منطق ارسال پیامک را در متد `sendNotification` تعریف کند.
 
-* **اضافه کردن خطوط به Main:**
+ **اضافه کردن خطوط به Main:**
     ```java
     PaymentService ONSITEProcessor = new ONSITEPaymentService();
     MessageSender SMSSender = new SMSSender();
