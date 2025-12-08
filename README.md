@@ -113,9 +113,12 @@
 **قابلیت SMS:** ساخت یک کلاس جدید به نام `SmsSender.java` که اینترفیس `MessageSender` را پیاده‌سازی کرده و منطق ارسال پیامک را در متد `sendNotification` تعریف کند.
 
 **اضافه کردن خطوط زیر به Main:**
-    PaymentService ONSITEProcessor = new ONSITEPaymentService();
-    MessageSender SMSSender = new SMSSender();
 
-    <div dir="rtl">
- برای اینکه سیستم برای هر روش پرداختی و اطلاع‌رسانی آماده باشد، باید نمونه‌های آن‌ها نیز در `Main` ساخته شوند، هرچند که ممکن است فعلاً از آن‌ها در فراخوانی نهایی استفاده نکنید.
-    </div>
+
+PaymentService ONSITEProcessor = new ONSITEPaymentService();
+
+MessageSender SMSSender = new SMSSender();
+
+<div dir="rtl">
+ برای اینکه سیستم برای هر روش پرداختی و اطلاع رسانی آماده باشد، باید نمونه‌های آن‌ها نیز در Main ساخته شوند هرچند که ممکن است فعلاً از آن‌ها در فراخوانی نهایی استفاده نکنیم.
+</div>
