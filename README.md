@@ -39,9 +39,9 @@
 
 | ردیف | کلاس تغییر یافته | تغییرات اعمال شده | توضیح کوتاه در مورد تغییر |
 | :---: | :---: | :---: | :---: |
-| **۱** | `PaymentMethods.java` | `ONSITE` (افزوده شده به `enum`) | افزودن نوع پرداخت جدید به سیستم |
-| **۲** | `PaymentProcessor.java` | `public void payOnSite(double amount)` | افزودن متد اجرای منطق پرداخت حضوری |
-| **۳** | `ReservationService.java` | افزودن `case ONSITE:` و فراخوانی `payOnSite()` | افزودن شرط برای هندل کردن پرداخت حضوری در ساختار `switch` |
+| **۵** | `PaymentMethods.java` | `ONSITE` (افزوده شده به `enum`) | افزودن نوع پرداخت جدید به سیستم |
+| **۶** | `PaymentProcessor.java` | `public void payOnSite(double amount)` | افزودن متد اجرای منطق پرداخت حضوری |
+| **۷** | `ReservationService.java` | افزودن `case ONSITE:` و فراخوانی `payOnSite()` | افزودن شرط برای هندل کردن پرداخت حضوری در ساختار `switch` |
 
 </div>
 
