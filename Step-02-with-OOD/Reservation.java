@@ -4,6 +4,7 @@ import models.Customer;
 import models.Room;
 
 public class Reservation {
+
     private Room room;
     private Customer customer;
     private int nights;

@@ -1,43 +1,32 @@
 package services;
 
-import constants.Notifier;
-import constants.PaymentMethods;
-
 public class ReservationService {
-    private MessageSender messageSender; 
-    private PaymentProcessor paymentProcessor;
+    private final MessageSender messageSender;
+    private final PaymentService paymentService;
+    private final DiscountStrategy discountStrategy;
+    private final InvoicePrinter invoicePrinter;
 
-    public ReservationService(MessageSender sender, PaymentProcessor processor) {
+    public ReservationService(
+        MessageSender sender,
+        PaymentService paymentProcessor,
+        DiscountStrategy discount,
+        InvoicePrinter printer)
+    {
         this.messageSender = sender;
-        this.paymentProcessor = processor;
+        this.paymentService = paymentProcessor;
+        this.discountStrategy = discount;
+        this.invoicePrinter = printer;
     }
 
-    public void makeReservation(Reservation res, PaymentMethods paymentType, Notifier notifier){
+    public void makeReservation(Reservation res, String confirmationMessage){
         System.out.println("Processing reservation for " + res.getCustomerName());
 
-        if(res.isCustomerFromCity("Paris")){
-            System.out.println("Apply city discount for Paris!");
-            res.applyDiscountToRoom(0.9); // Encapsulated discount application
-        }
+        discountStrategy.applyDiscount(res);
 
-        switch (paymentType){
-            case CARD:
-                paymentProcessor.payByCard(res.totalPrice());
-                break;
-            case PAYPAL:
-                paymentProcessor.payByPayPal(res.totalPrice());
-                break;
-            case CASH:
-                paymentProcessor.payByCash(res.totalPrice());
-                break;
-        }
+        paymentService.processPayment(res.getTotalPrice());
 
-        System.out.println("----- INVOICE -----");
-        System.out.println("hotel.Customer: " + res.getCustomerName());
-        System.out.println("hotel.Room: " + res.getRoomNumber() + " (" + res.getRoomType() + ")");
-        System.out.println("Total: " + res.totalPrice());
-        System.out.println("-------------------");
+        invoicePrinter.printInvoice(res);
 
-       messageSender.sendMessage(res.getCustomerEmail(), "Your reservation confirmed!");
+        messageSender.sendMessage(res.getCustomerEmail(), confirmationMessage);
     }
 }
