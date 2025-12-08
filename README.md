@@ -94,7 +94,27 @@
 | **DIP** | کلاس `ReservationService` به طور مستقیم به پیاده‌سازی‌های مشخص (`EmailSender` و `PaymentProcessor`) وابسته بود. این وابستگی‌ها در داخل متد `makeReservation` (با ایجاد نمونه از `EmailSender`) و در فیلدهای عضو کلاس (`private PaymentProcessor paymentProcessor = new PaymentProcessor()`) دیده می‌شد. این طراحی، `ReservationService` را به جزئیات پیاده‌سازی گره زده بود. | وابستگی‌های `ReservationService` به سطوح انتزاعی تغییر یافت. به جای وابستگی مستقیم به `EmailSender`، به واسط `MessageSender` وابسته شد. همچنین به جای ایجاد داخلی `PaymentProcessor`، این وابستگی از طریق سازنده (`constructor injection`) دریافت شد. سازنده کلاس به `public ReservationService(MessageSender sender, PaymentProcessor processor)` تغییر یافت. در نتیجه `ReservationService` دیگر از جزئیات پیاده‌سازی اطلاعی ندارد. |
 | **DIP** | در نقطه آغاز برنامه (`Main`)، کلاس `ReservationService` بدون ارسال وابستگی‌ها ساخته می‌شد. این موضوع باعث نقض `DIP` در سطح بالاتر و عدم امکان تزریق پیاده‌سازی‌های جایگزین بود. | منطق ایجاد و تزریق وابستگی‌ها به کلاس `Main` منتقل شد. اشیای `EmailSender` و `PaymentProcessor` در `Main` ساخته شدند و سپس از طریق سازنده جدید به `ReservationService` تزریق شدند: `ReservationService service = new ReservationService(emailSender, paymentProcessor);` این تغییر کنترل وابستگی‌ها را به لایه بالاتر داد و `DIP` را در تمامی سطوح برقرار کرد. |
 | **DIP** | کلاس‌های سطح پایین (`EmailSender` و `PaymentProcessor`) با سطح دسترسی بسته (`package-private`) تعریف شده بودند و استفاده از آن‌ها در بسته‌های دیگر (مثلاً بسته `Main`) را غیرممکن می‌کرد، که مانع تزریق صحیح وابستگی‌ها می‌شد. | سطح دسترسی هر دو کلاس `EmailSender` و `PaymentProcessor` به `public` تغییر یافت. این کار ضروری بود تا کلاس `Main` بتواند نمونه‌های این کلاس‌ها را ساخته و به `ReservationService` تزریق کند. بدون این تغییر، اجرای کامل `DIP` ممکن نبود. |
-
-
-
 </div>
+
+## **گام ۴: بررسی مجدد تغییرات مورد نیاز**
+
+
+فرض کردیم که گام 1 را برای کد اصلاح شده (پس از انجام گام‌های ۲ و ۳) اجرا کرده‌ایم.
+
+۱.در این صورت از انجام کدام یک از تغییرات ثبت شده در جدول گام ۱ معاف خواهیم شد؟
+در این صورت از تمام مراحل، 1 و 2 و 3 و 4و 5و 6 و 7 معاف می شویم
+
+
+۲.تعداد تغییرات مورد نیاز، چند تغییر خواهد شد؟
+۴ تا
+
+قابلیت ONSITE: ساخت یک کلاس جدید به نام OnSitePaymentService.java که اینترفیس PaymentService را پیاده‌سازی کرده و منطق پرداخت حضوری را در متد processPayment تعریف کند.
+
+قابلیت SMS: ساخت یک کلاس جدید به نام SmsSender.java که اینترفیس MessageSender را پیاده‌سازی کرده و منطق ارسال پیامک را در متد sendNotification تعریف کند.
+
+اضافه کردن خطوط زیر به Main:
+
+PaymentService ONSITEProcessor = new ONSITEPaymentService();
+MessageSender SMSSender = new SMSSender();
+ برای اینکه سیستم برای هر روش پرداختی و اطلاع رسانی آماده باشه، باید نمونه‌های آن‌ها نیز در Main ساخته شوند هرچند که ممکن است فعلاً از آن‌ها در فراخوانی نهایی استفاده نکنیم.
+
