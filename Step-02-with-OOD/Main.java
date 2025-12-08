@@ -19,10 +19,10 @@ public class Main {
         ReservationService service = new ReservationService(
     emailSender,      
     paypalProcessor,    
-    discountStrategy,  
+    compositeDiscountService,  
     printer           
 );
 
-service.makeReservation(res);
+service.makeReservation(res, "Your reservation confirmed!");
     }
 }
